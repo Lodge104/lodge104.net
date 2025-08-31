@@ -4,7 +4,7 @@ resource "aws_cloudfront_distribution" "wordpress" {
 
   origin {
     domain_name = var.alb_domain_name
-    origin_id   = "${var.project_name}-alb-origin"
+    origin_id   = "${var.project_name}-${var.environment}-alb-origin"
 
     custom_origin_config {
       http_port              = 80
@@ -24,7 +24,7 @@ resource "aws_cloudfront_distribution" "wordpress" {
     path_pattern     = "/wp-admin/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.project_name}-alb-origin"
+    target_origin_id = "${var.project_name}-${var.environment}-alb-origin"
     
     forwarded_values {
       query_string = var.query_string
@@ -47,7 +47,7 @@ resource "aws_cloudfront_distribution" "wordpress" {
     path_pattern     = "/wp-login.php"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.project_name}-alb-origin"
+    target_origin_id = "${var.project_name}-${var.environment}-alb-origin"
     
     forwarded_values {
       query_string = var.query_string
@@ -70,7 +70,7 @@ resource "aws_cloudfront_distribution" "wordpress" {
     path_pattern     = "*.css"
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.project_name}-alb-origin"
+    target_origin_id = "${var.project_name}-${var.environment}-alb-origin"
     
     forwarded_values {
       query_string = false
@@ -93,7 +93,7 @@ resource "aws_cloudfront_distribution" "wordpress" {
     path_pattern     = "*.js"
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.project_name}-alb-origin"
+    target_origin_id = "${var.project_name}-${var.environment}-alb-origin"
     
     forwarded_values {
       query_string = false
@@ -116,7 +116,7 @@ resource "aws_cloudfront_distribution" "wordpress" {
     path_pattern     = "/wp-content/uploads/*"
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.project_name}-alb-origin"
+    target_origin_id = "${var.project_name}-${var.environment}-alb-origin"
     
     forwarded_values {
       query_string = false
@@ -138,7 +138,7 @@ resource "aws_cloudfront_distribution" "wordpress" {
   default_cache_behavior {
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "${var.project_name}-alb-origin"
+    target_origin_id       = "${var.project_name}-${var.environment}-alb-origin"
     viewer_protocol_policy = "redirect-to-https"
     
     forwarded_values {
@@ -174,7 +174,7 @@ resource "aws_cloudfront_distribution" "wordpress" {
   }
 
   tags = {
-    Name        = "${var.project_name}-cloudfront"
+    Name        = "${var.project_name}-${var.environment}-cloudfront"
     Environment = var.environment
   }
 }

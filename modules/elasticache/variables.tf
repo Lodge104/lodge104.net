@@ -36,7 +36,7 @@ variable "port" {
 variable "engine_version" {
   description = "The version of Redis to use"
   type        = string
-  default     = "7.0"
+  default     = "7.x"
 }
 
 variable "parameter_group_family" {

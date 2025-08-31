@@ -141,8 +141,8 @@ cat > /etc/httpd/conf.d/wordpress.conf << EOF
     # Add a trailing slash to /wp-admin
     RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
     
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteCond %%{REQUEST_FILENAME} -f [OR]
+    RewriteCond %%{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
     RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
     RewriteRule ^(.*\.php)$ $1 [L]
@@ -189,8 +189,8 @@ if [ "${enable_https_backend}" = "true" ]; then
     # Add a trailing slash to /wp-admin
     RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
     
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteCond %%{REQUEST_FILENAME} -f [OR]
+    RewriteCond %%{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
     RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
     RewriteRule ^(.*\.php)$ $1 [L]

@@ -1,4 +1,16 @@
 # Aurora Serverless Cluster Variables
+variable "project_name" {
+  description = "The name of the project"
+  type        = string
+  default     = "wordpress"
+}
+
+variable "environment" {
+  description = "The environment (dev, prod, etc.)"
+  type        = string
+  default     = "dev"
+}
+
 variable "cluster_identifier" {
   description = "The cluster identifier for Aurora Serverless"
   type        = string

@@ -1,39 +1,39 @@
 output "redis_primary_endpoint" {
-  description = "Primary endpoint for the Redis replication group"
-  value       = aws_elasticache_replication_group.redis.primary_endpoint_address
+  description = "Primary endpoint for the Redis cluster"
+  value       = aws_elasticache_cluster.redis.cache_nodes[0].address
 }
 
 output "redis_reader_endpoint" {
-  description = "Reader endpoint for the Redis replication group"
-  value       = aws_elasticache_replication_group.redis.reader_endpoint_address
+  description = "Reader endpoint for the Redis cluster (same as primary for single node)"
+  value       = aws_elasticache_cluster.redis.cache_nodes[0].address
 }
 
 output "redis_port" {
   description = "Port of the Redis cluster"
-  value       = aws_elasticache_replication_group.redis.port
+  value       = aws_elasticache_cluster.redis.cache_nodes[0].port
 }
 
 output "redis_replication_group_id" {
-  description = "ID of the Redis replication group"
-  value       = aws_elasticache_replication_group.redis.replication_group_id
+  description = "ID of the Redis cluster"
+  value       = aws_elasticache_cluster.redis.cluster_id
 }
 
 output "redis_configuration_endpoint" {
-  description = "Configuration endpoint for the Redis cluster (if cluster mode enabled)"
-  value       = aws_elasticache_replication_group.redis.configuration_endpoint_address
+  description = "Configuration endpoint for the Redis cluster (single node - same as primary)"
+  value       = aws_elasticache_cluster.redis.cache_nodes[0].address
 }
 
 output "redis_auth_token_enabled" {
   description = "Whether Redis AUTH is enabled"
-  value       = var.auth_token_enabled
+  value       = false  # Single cluster doesn't support auth token in this configuration
 }
 
 output "redis_encryption_at_rest" {
   description = "Whether encryption at rest is enabled"
-  value       = var.at_rest_encryption_enabled
+  value       = false  # Single cluster basic configuration
 }
 
 output "redis_encryption_in_transit" {
   description = "Whether encryption in transit is enabled"
-  value       = var.transit_encryption_enabled
+  value       = false  # Single cluster basic configuration
 }

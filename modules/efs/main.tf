@@ -3,12 +3,7 @@ resource "aws_efs_file_system" "wordpress_efs" {
   performance_mode = var.performance_mode
   throughput_mode  = var.throughput_mode
   
-  dynamic "provisioned_throughput_in_mibps" {
-    for_each = var.throughput_mode == "provisioned" ? [var.provisioned_throughput_in_mibps] : []
-    content {
-      provisioned_throughput_in_mibps = provisioned_throughput_in_mibps.value
-    }
-  }
+  provisioned_throughput_in_mibps = var.throughput_mode == "provisioned" ? var.provisioned_throughput_in_mibps : null
 
   lifecycle_policy {
     transition_to_ia = "AFTER_30_DAYS"

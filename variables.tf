@@ -226,3 +226,82 @@ variable "enable_https_backend" {
   type        = bool
   default     = false
 }
+
+# Additional missing variables from terraform.tfvars
+variable "cloudfront_origin" {
+  description = "The origin domain name for CloudFront distribution"
+  type        = string
+  default     = ""
+}
+
+variable "route53_domain_name" {
+  description = "The domain name for Route53 DNS records"
+  type        = string
+  default     = ""
+}
+
+variable "route53_hosted_zone_id" {
+  description = "The hosted zone ID for Route53 DNS records"
+  type        = string
+  default     = ""
+}
+
+variable "db_instance_class" {
+  description = "The instance class for the RDS database"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_engine" {
+  description = "The database engine for RDS"
+  type        = string
+  default     = "mysql"
+}
+
+variable "efs_performance_mode" {
+  description = "The performance mode for EFS (generalPurpose or maxIO)"
+  type        = string
+  default     = "generalPurpose"
+}
+
+variable "key_name" {
+  description = "Key pair name for SSH access to EC2 instances"
+  type        = string
+  default     = null
+}
+
+variable "ami_id" {
+  description = "AMI ID for EC2 instances (if not provided, will use latest Amazon Linux)"
+  type        = string
+  default     = null
+}
+
+variable "db_instance_class" {
+  description = "The instance class for RDS"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_engine" {
+  description = "The database engine"
+  type        = string
+  default     = "mysql"
+}
+
+variable "cloudfront_origin" {
+  description = "CloudFront origin domain name"
+  type        = string
+  default     = ""
+}
+
+variable "route53_domain_name" {
+  description = "Route53 domain name"
+  type        = string
+  default     = ""
+}
+
+variable "route53_hosted_zone_id" {
+  description = "Route53 hosted zone ID"
+  type        = string
+  default     = ""
+}

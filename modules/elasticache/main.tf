@@ -36,48 +36,24 @@ resource "aws_elasticache_parameter_group" "redis" {
   }
 }
 
-# ElastiCache Redis Replication Group
-resource "aws_elasticache_replication_group" "redis" {
-  replication_group_id         = "${var.project_name}-redis"
-  description                  = "Redis cluster for ${var.project_name} WordPress"
-  
-  # Redis Configuration
+# ElastiCache Redis Cluster (Single Node for Dev)
+resource "aws_elasticache_cluster" "redis" {
+  cluster_id           = "${var.project_name}-redis"
+  engine               = "redis"
   node_type            = var.node_type
   port                 = var.port
   parameter_group_name = aws_elasticache_parameter_group.redis.name
   
-  # Cluster Configuration
-  num_cache_clusters         = var.num_cache_clusters
-  automatic_failover_enabled = var.automatic_failover_enabled
-  multi_az_enabled          = var.multi_az_enabled
-  
   # Network & Security
-  subnet_group_name  = aws_elasticache_subnet_group.redis.name
-  security_group_ids = var.security_group_ids
-  
-  # Backup & Maintenance
-  snapshot_retention_limit = var.snapshot_retention_limit
-  snapshot_window         = var.snapshot_window
-  maintenance_window      = var.maintenance_window
-  
-  # Encryption
-  at_rest_encryption_enabled = var.at_rest_encryption_enabled
-  transit_encryption_enabled = var.transit_encryption_enabled
-  auth_token                = var.auth_token_enabled ? var.auth_token : null
+  subnet_group_name    = aws_elasticache_subnet_group.redis.name
+  security_group_ids   = var.security_group_ids
   
   # Engine Version
   engine_version = var.engine_version
-  
-  # Auto Minor Version Upgrade
-  auto_minor_version_upgrade = var.auto_minor_version_upgrade
 
   tags = {
     Name        = "${var.project_name}-redis"
     Environment = var.environment
-  }
-
-  lifecycle {
-    ignore_changes = [num_cache_clusters]
   }
 }
 

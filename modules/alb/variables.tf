@@ -49,6 +49,12 @@ variable "ssl_policy" {
   default     = "ELBSecurityPolicy-TLS-1-2-2017-01"
 }
 
+variable "enable_ssl" {
+  description = "Enable SSL/TLS listener (requires ssl_certificate_arn)"
+  type        = bool
+  default     = true
+}
+
 variable "enable_https_backend" {
   description = "Enable HTTPS communication to backend instances"
   type        = bool

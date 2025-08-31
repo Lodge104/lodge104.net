@@ -23,15 +23,15 @@ resource "aws_rds_cluster" "wordpress_aurora" {
   }
 
   tags = {
-    Name = "wordpress-aurora-serverless"
+    Name = "${var.project_name}-${var.environment}-aurora-serverless"
   }
 }
 
 resource "aws_db_subnet_group" "wordpress_subnet_group" {
-  name       = "wordpress-subnet-group"
+  name       = "${var.project_name}-${var.environment}-subnet-group"
   subnet_ids = var.subnet_ids
 
   tags = {
-    Name = "wordpress-subnet-group"
+    Name = "${var.project_name}-${var.environment}-subnet-group"
   }
 }

@@ -1,6 +1,6 @@
 # Launch Template
 resource "aws_launch_template" "wordpress" {
-  name_prefix   = "${var.project_name}-lt-"
+  name_prefix   = "${var.project_name}-${var.environment}-lt-"
   description   = "Launch template for WordPress instances"
   image_id      = var.ami_id
   instance_type = var.instance_type
@@ -24,7 +24,7 @@ resource "aws_launch_template" "wordpress" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name        = "${var.project_name}-instance"
+      Name        = "${var.project_name}-${var.environment}-instance"
       Environment = var.environment
     }
   }
@@ -36,7 +36,7 @@ resource "aws_launch_template" "wordpress" {
 
 # Auto Scaling Group
 resource "aws_autoscaling_group" "wordpress" {
-  name                = "${var.project_name}-asg"
+  name                = "${var.project_name}-${var.environment}-asg"
   vpc_zone_identifier = var.subnet_ids
   target_group_arns   = [var.target_group_arn]
   health_check_type   = "ELB"
@@ -73,7 +73,7 @@ resource "aws_autoscaling_group" "wordpress" {
 
 # Auto Scaling Policies
 resource "aws_autoscaling_policy" "scale_up" {
-  name                   = "${var.project_name}-scale-up"
+  name                   = "${var.project_name}-${var.environment}-scale-up"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
@@ -81,7 +81,7 @@ resource "aws_autoscaling_policy" "scale_up" {
 }
 
 resource "aws_autoscaling_policy" "scale_down" {
-  name                   = "${var.project_name}-scale-down"
+  name                   = "${var.project_name}-${var.environment}-scale-down"
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
@@ -90,7 +90,7 @@ resource "aws_autoscaling_policy" "scale_down" {
 
 # CloudWatch Alarms
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
-  alarm_name          = "${var.project_name}-cpu-high"
+  alarm_name          = "${var.project_name}-${var.environment}-cpu-high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "2"
   metric_name         = "CPUUtilization"
@@ -107,7 +107,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_low" {
-  alarm_name          = "${var.project_name}-cpu-low"
+  alarm_name          = "${var.project_name}-${var.environment}-cpu-low"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   metric_name         = "CPUUtilization"

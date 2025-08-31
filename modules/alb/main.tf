@@ -1,6 +1,6 @@
 # Application Load Balancer
 resource "aws_lb" "wordpress_alb" {
-  name               = "${var.project_name}-alb"
+  name               = "${var.project_name}-${var.environment}-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = var.security_group_ids
@@ -9,14 +9,14 @@ resource "aws_lb" "wordpress_alb" {
   enable_deletion_protection = var.enable_deletion_protection
 
   tags = {
-    Name        = "${var.project_name}-alb"
+    Name        = "${var.project_name}-${var.environment}-alb"
     Environment = var.environment
   }
 }
 
 # Target Group
 resource "aws_lb_target_group" "wordpress" {
-  name     = "${var.project_name}-tg"
+  name     = "${var.project_name}-${var.environment}-tg"
   port     = var.backend_port
   protocol = var.backend_protocol
   vpc_id   = var.vpc_id
@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "wordpress" {
   }
 
   tags = {
-    Name        = "${var.project_name}-tg"
+    Name        = "${var.project_name}-${var.environment}-tg"
     Environment = var.environment
   }
 }
@@ -58,7 +58,7 @@ resource "aws_lb_listener" "http" {
 
 # HTTPS Listener
 resource "aws_lb_listener" "https" {
-  count             = var.ssl_certificate_arn != "" ? 1 : 0
+  count             = var.enable_ssl ? 1 : 0
   load_balancer_arn = aws_lb.wordpress_alb.arn
   port              = "443"
   protocol          = "HTTPS"
@@ -73,7 +73,7 @@ resource "aws_lb_listener" "https" {
 
 # HTTP Listener for non-SSL (when no certificate)
 resource "aws_lb_listener" "http_forward" {
-  count             = var.ssl_certificate_arn == "" ? 1 : 0
+  count             = var.enable_ssl ? 0 : 1
   load_balancer_arn = aws_lb.wordpress_alb.arn
   port              = "80"
   protocol          = "HTTP"

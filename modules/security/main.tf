@@ -1,6 +1,6 @@
 # ALB Security Group
 resource "aws_security_group" "alb" {
-  name_prefix = "${var.project_name}-alb-"
+  name_prefix = "${var.project_name}-${var.environment}-alb-"
   description = "Security group for Application Load Balancer"
   vpc_id      = var.vpc_id
 
@@ -29,14 +29,14 @@ resource "aws_security_group" "alb" {
   }
 
   tags = {
-    Name = "${var.project_name}-alb-sg"
+    Name = "${var.project_name}-${var.environment}-alb-sg"
     Environment = var.environment
   }
 }
 
 # Web Server Security Group
 resource "aws_security_group" "web_server" {
-  name_prefix = "${var.project_name}-web-"
+  name_prefix = "${var.project_name}-${var.environment}-web-"
   description = "Security group for WordPress web servers"
   vpc_id      = var.vpc_id
 
@@ -73,14 +73,14 @@ resource "aws_security_group" "web_server" {
   }
 
   tags = {
-    Name = "${var.project_name}-web-sg"
+    Name = "${var.project_name}-${var.environment}-web-sg"
     Environment = var.environment
   }
 }
 
 # Database Security Group
 resource "aws_security_group" "database" {
-  name_prefix = "${var.project_name}-db-"
+  name_prefix = "${var.project_name}-${var.environment}-db-"
   description = "Security group for Aurora database"
   vpc_id      = var.vpc_id
 
@@ -101,14 +101,14 @@ resource "aws_security_group" "database" {
   }
 
   tags = {
-    Name = "${var.project_name}-db-sg"
+    Name = "${var.project_name}-${var.environment}-db-sg"
     Environment = var.environment
   }
 }
 
 # EFS Security Group
 resource "aws_security_group" "efs" {
-  name_prefix = "${var.project_name}-efs-"
+  name_prefix = "${var.project_name}-${var.environment}-efs-"
   description = "Security group for EFS file system"
   vpc_id      = var.vpc_id
 
@@ -129,14 +129,14 @@ resource "aws_security_group" "efs" {
   }
 
   tags = {
-    Name = "${var.project_name}-efs-sg"
+    Name = "${var.project_name}-${var.environment}-efs-sg"
     Environment = var.environment
   }
 }
 
 # Redis Security Group
 resource "aws_security_group" "redis" {
-  name_prefix = "${var.project_name}-redis-"
+  name_prefix = "${var.project_name}-${var.environment}-redis-"
   description = "Security group for ElastiCache Redis cluster"
   vpc_id      = var.vpc_id
 
@@ -157,7 +157,7 @@ resource "aws_security_group" "redis" {
   }
 
   tags = {
-    Name = "${var.project_name}-redis-sg"
+    Name = "${var.project_name}-${var.environment}-redis-sg"
     Environment = var.environment
   }
 }

@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = var.enable_dns_hostnames
 
   tags = {
-    Name = "${var.project_name}-vpc"
+    Name = "${var.project_name}-${var.environment}-vpc"
     Environment = var.environment
   }
 }
@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${var.project_name}-igw"
+    Name = "${var.project_name}-${var.environment}-igw"
     Environment = var.environment
   }
 }
@@ -30,7 +30,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.project_name}-public-subnet-${count.index + 1}"
+    Name = "${var.project_name}-${var.environment}-public-subnet-${count.index + 1}"
     Type = "Public"
     Environment = var.environment
   }
@@ -44,7 +44,7 @@ resource "aws_subnet" "private" {
   availability_zone = var.availability_zones[count.index]
 
   tags = {
-    Name = "${var.project_name}-private-subnet-${count.index + 1}"
+    Name = "${var.project_name}-${var.environment}-private-subnet-${count.index + 1}"
     Type = "Private"
     Environment = var.environment
   }
@@ -58,7 +58,7 @@ resource "aws_subnet" "database" {
   availability_zone = var.availability_zones[count.index]
 
   tags = {
-    Name = "${var.project_name}-database-subnet-${count.index + 1}"
+    Name = "${var.project_name}-${var.environment}-database-subnet-${count.index + 1}"
     Type = "Database"
     Environment = var.environment
   }
@@ -66,13 +66,12 @@ resource "aws_subnet" "database" {
 
 # Elastic IPs for NAT Gateways
 resource "aws_eip" "nat" {
-  count  = length(var.public_subnet_cidrs)
-  domain = "vpc"
+  count = length(var.public_subnet_cidrs)
 
   depends_on = [aws_internet_gateway.main]
 
   tags = {
-    Name = "${var.project_name}-nat-eip-${count.index + 1}"
+    Name = "${var.project_name}-${var.environment}-nat-eip-${count.index + 1}"
     Environment = var.environment
   }
 }
@@ -86,7 +85,7 @@ resource "aws_nat_gateway" "main" {
   depends_on = [aws_internet_gateway.main]
 
   tags = {
-    Name = "${var.project_name}-nat-gw-${count.index + 1}"
+    Name = "${var.project_name}-${var.environment}-nat-gw-${count.index + 1}"
     Environment = var.environment
   }
 }
@@ -101,7 +100,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "${var.project_name}-public-rt"
+    Name = "${var.project_name}-${var.environment}-public-rt"
     Environment = var.environment
   }
 }
@@ -117,7 +116,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${var.project_name}-private-rt-${count.index + 1}"
+    Name = "${var.project_name}-${var.environment}-private-rt-${count.index + 1}"
     Environment = var.environment
   }
 }
@@ -127,7 +126,7 @@ resource "aws_route_table" "database" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${var.project_name}-database-rt"
+    Name = "${var.project_name}-${var.environment}-database-rt"
     Environment = var.environment
   }
 }
