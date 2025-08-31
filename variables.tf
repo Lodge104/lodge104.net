@@ -275,33 +275,3 @@ variable "ami_id" {
   type        = string
   default     = null
 }
-
-variable "db_instance_class" {
-  description = "The instance class for RDS"
-  type        = string
-  default     = "db.t3.micro"
-}
-
-variable "db_engine" {
-  description = "The database engine"
-  type        = string
-  default     = "mysql"
-}
-
-variable "cloudfront_origin" {
-  description = "CloudFront origin domain name"
-  type        = string
-  default     = ""
-}
-
-variable "route53_domain_name" {
-  description = "Route53 domain name"
-  type        = string
-  default     = ""
-}
-
-variable "route53_hosted_zone_id" {
-  description = "Route53 hosted zone ID"
-  type        = string
-  default     = ""
-}
