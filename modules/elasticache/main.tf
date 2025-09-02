@@ -11,23 +11,12 @@ resource "aws_elasticache_subnet_group" "redis" {
 
 # ElastiCache Parameter Group
 resource "aws_elasticache_parameter_group" "redis" {
-  family = var.parameter_group_family
+  family = "redis6.x"
   name   = "${var.project_name}-redis-params"
 
-  # WordPress-optimized Redis parameters
   parameter {
     name  = "maxmemory-policy"
     value = "allkeys-lru"
-  }
-
-  parameter {
-    name  = "timeout"
-    value = "300"
-  }
-
-  parameter {
-    name  = "tcp-keepalive"
-    value = "60"
   }
 
   tags = {
@@ -41,6 +30,7 @@ resource "aws_elasticache_cluster" "redis" {
   cluster_id           = "${var.project_name}-redis"
   engine               = "redis"
   node_type            = var.node_type
+  num_cache_nodes      = 1
   port                 = var.port
   parameter_group_name = aws_elasticache_parameter_group.redis.name
   

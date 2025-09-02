@@ -20,7 +20,7 @@ variable "cluster_identifier" {
 variable "aurora_engine_version" {
   description = "The engine version for Aurora MySQL"
   type        = string
-  default     = "5.7.mysql_aurora.2.10.1"
+  default     = "8.0.mysql_aurora.3.08.2"
 }
 
 variable "db_name" {

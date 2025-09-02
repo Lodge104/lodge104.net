@@ -20,7 +20,19 @@ echo "✅ Exporting AWS credentials as environment variables..."
 # Export credentials
 eval "$(aws configure export-credentials --profile $PROFILE_NAME --format env)"
 
+# Also export additional useful environment variables
+export AWS_PROFILE=$PROFILE_NAME
+export AWS_DEFAULT_REGION=$REGION
+export AWS_REGION=$REGION
+
 echo "✅ AWS credentials exported successfully!"
+echo "📋 Environment variables set:"
+echo "   AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+echo "   AWS_SECRET_ACCESS_KEY=***hidden***"
+echo "   AWS_SESSION_TOKEN=***hidden***"
+echo "   AWS_PROFILE=$AWS_PROFILE"
+echo "   AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION"
+echo "   AWS_REGION=$AWS_REGION"
 
 # Verify the credentials work
 echo "� Verifying credentials..."
@@ -83,4 +95,21 @@ echo "🚀 You can now run Terraform commands:"
 echo "   cd environments/dev && terraform plan"
 echo "   cd environments/prod && terraform plan"
 echo ""
-echo "📝 Note: These credentials expire in 1 hour. Re-run this script if they expire."
+echo "� Saving credentials to .aws-env file..."
+
+# Save environment variables to a file that can be sourced
+cat > .aws-env << EOF
+# AWS SSO Credentials - Generated on $(date)
+# Source this file with: source .aws-env
+export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
+export AWS_SESSION_TOKEN="$AWS_SESSION_TOKEN"
+export AWS_PROFILE="$AWS_PROFILE"
+export AWS_DEFAULT_REGION="$AWS_DEFAULT_REGION"
+export AWS_REGION="$AWS_REGION"
+EOF
+
+echo "✅ Credentials saved to .aws-env file"
+echo "🔄 To reuse these credentials in a new terminal, run: source .aws-env"
+echo ""
+echo "�📝 Note: These credentials expire in 1 hour. Re-run this script if they expire."

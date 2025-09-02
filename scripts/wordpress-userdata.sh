@@ -38,6 +38,13 @@ mkdir -p /var/www/efs
 echo "${efs_file_system_id}.efs.$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//).amazonaws.com:/ /var/www/efs efs defaults,_netdev" >> /etc/fstab
 mount -a
 
+# Verify EFS mount was successful
+if ! mountpoint -q /var/www/efs; then
+    echo "ERROR: Failed to mount EFS filesystem. Creating local WordPress directory as fallback."
+    mkdir -p /var/www/efs/wordpress
+    chown apache:apache /var/www/efs/wordpress
+fi
+
 # Create WordPress directory in EFS if it doesn't exist
 if [ ! -d "/var/www/efs/wordpress" ]; then
     mkdir -p /var/www/efs/wordpress
@@ -118,6 +125,19 @@ fi
 # Create symlink from web root to WordPress in EFS
 rm -rf /var/www/html
 ln -s /var/www/efs/wordpress /var/www/html
+
+# Ensure WordPress directory exists and is accessible
+if [ ! -d "/var/www/efs/wordpress" ]; then
+    echo "ERROR: WordPress directory does not exist at /var/www/efs/wordpress"
+    # Create basic index file as fallback
+    mkdir -p /var/www/efs/wordpress
+    echo "<?php echo 'WordPress is setting up...'; ?>" > /var/www/efs/wordpress/index.php
+    chown -R apache:apache /var/www/efs/wordpress/
+fi
+
+# Create a health check file for load balancer
+echo "OK" > /var/www/efs/wordpress/health.html
+chown apache:apache /var/www/efs/wordpress/health.html
 
 # Configure Apache for WordPress Multi-site
 cat > /etc/httpd/conf.d/wordpress.conf << EOF

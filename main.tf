@@ -84,28 +84,35 @@ module "autoscaling" {
   
   project_name             = var.project_name
   environment             = var.environment
+  ami_id                  = data.aws_ami.amazon_linux_2.id
   instance_type           = var.instance_type
   min_size                = var.min_size
   max_size                = var.max_size
   desired_capacity        = var.desired_capacity
   subnet_ids              = module.vpc.private_subnet_ids
   target_group_arn        = module.alb.target_group_arn
-  security_group_ids      = [module.security.web_security_group_id]
+  security_group_ids      = [module.security.web_server_security_group_id]
   
   # Database connection
-  db_name                 = module.rds.db_name
-  db_username             = module.rds.db_username
-  db_password             = module.rds.db_password
-  db_endpoint             = module.rds.db_endpoint
+  db_name                 = module.rds.cluster_database_name
+  db_username             = module.rds.cluster_master_username
+  db_password             = var.db_password
+  db_endpoint             = module.rds.cluster_endpoint
   
   # EFS
   efs_file_system_id      = module.efs.file_system_id
   
+  # Redis (ElastiCache)
+  redis_endpoint          = module.elasticache.redis_primary_endpoint
+  redis_port              = module.elasticache.redis_port
+  redis_auth_token        = var.redis_auth_token
+  
+  # Domain configuration
+  primary_domain          = var.domain_name
+  enable_https_backend    = var.enable_https_backend
+  
   # Key pair
   key_name                = var.key_name
-  
-  # AMI
-  ami_id                  = var.ami_id
 }
 
 module "acm" {
@@ -117,21 +124,22 @@ module "acm" {
   route53_zone_id = var.route53_zone_id
 }
 
-module "cloudfront" {
-  source = "./modules/cloudfront"
+# Temporarily disabled - CloudFront requires account verification
+# module "cloudfront" {
+#   source = "./modules/cloudfront"
   
-  project_name        = var.project_name
-  environment        = var.environment
-  alb_domain_name    = module.alb.alb_dns_name
+#   project_name        = var.project_name
+#   environment        = var.environment
+#   alb_domain_name    = module.alb.alb_dns_name
   
-  # CloudFront configuration
-  price_class        = var.cloudfront_price_class
+#   # CloudFront configuration
+#   price_class        = var.cloudfront_price_class
   
-  # Cache behaviors
-  default_ttl        = var.cloudfront_default_ttl
-  max_ttl           = var.cloudfront_max_ttl
-  min_ttl           = var.cloudfront_min_ttl
-}
+#   # Cache behaviors
+#   default_ttl        = var.cloudfront_default_ttl
+#   max_ttl           = var.cloudfront_max_ttl
+#   min_ttl           = var.cloudfront_min_ttl
+# }
 
 module "route53" {
   source = "./modules/route53"
@@ -139,8 +147,8 @@ module "route53" {
   project_name            = var.project_name
   environment            = var.environment
   domain_name            = var.domain_name
-  cloudfront_domain_name = module.cloudfront.domain_name
-  cloudfront_zone_id     = module.cloudfront.hosted_zone_id
+  cloudfront_domain_name = module.alb.alb_dns_name  # Use ALB directly instead of CloudFront
+  cloudfront_zone_id     = module.alb.alb_zone_id   # Use ALB zone ID instead of CloudFront
   existing_zone_id       = var.route53_zone_id
   create_hosted_zone     = var.route53_zone_id == ""
 }

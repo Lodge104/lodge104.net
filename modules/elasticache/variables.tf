@@ -36,13 +36,13 @@ variable "port" {
 variable "engine_version" {
   description = "The version of Redis to use"
   type        = string
-  default     = "7.x"
+  default     = "6.x"
 }
 
 variable "parameter_group_family" {
   description = "The family of the ElastiCache parameter group"
   type        = string
-  default     = "redis7.x"
+  default     = "redis6.x"
 }
 
 # Cluster Configuration

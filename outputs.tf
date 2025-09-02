@@ -15,16 +15,16 @@ output "alb_zone_id" {
   value       = module.alb.alb_zone_id
 }
 
-# CloudFront Outputs
-output "cloudfront_domain_name" {
-  description = "Domain name of the CloudFront distribution"
-  value       = module.cloudfront.cloudfront_domain_name
-}
+# CloudFront Outputs (Temporarily disabled)
+# output "cloudfront_domain_name" {
+#   description = "Domain name of the CloudFront distribution"
+#   value       = module.cloudfront.cloudfront_domain_name
+# }
 
-output "cloudfront_distribution_id" {
-  description = "ID of the CloudFront distribution"
-  value       = module.cloudfront.cloudfront_distribution_id
-}
+# output "cloudfront_distribution_id" {
+#   description = "ID of the CloudFront distribution"
+#   value       = module.cloudfront.cloudfront_distribution_id
+# }
 
 # RDS Aurora Serverless Outputs
 output "aurora_cluster_endpoint" {

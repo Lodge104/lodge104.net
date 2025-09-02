@@ -35,3 +35,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# AWS credentials environment files
+.aws-env
+.env
+*.env
