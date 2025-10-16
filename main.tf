@@ -140,25 +140,3 @@ module "route53" {
   cloudfront_domain_name = module.cloudfront.cloudfront_domain_name
   cloudfront_zone_id    = module.cloudfront.cloudfront_hosted_zone_id
 }
-
-output "vpc_id" {
-  value = module.vpc.vpc_id
-}
-
-output "alb_dns_name" {
-  value = module.alb.alb_dns_name
-}
-
-output "cloudfront_distribution_id" {
-  value = module.cloudfront.distribution_id
-}
-
-output "ssl_certificate_arn" {
-  description = "ARN of the SSL certificate for the domain"
-  value       = module.acm.certificate_arn
-}
-
-output "route53_zone_id" {
-  description = "Route53 hosted zone ID"
-  value       = module.route53.hosted_zone_id
-}

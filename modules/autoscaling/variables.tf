@@ -116,13 +116,3 @@ variable "enable_https_backend" {
   type        = bool
   default     = false
 }
-
-variable "subnet_ids" {
-  description = "The list of subnet IDs where the Auto Scaling group will launch instances."
-  type        = list(string)
-}
-
-variable "ami_id" {
-  description = "The AMI ID to use for the instances."
-  type        = string
-}

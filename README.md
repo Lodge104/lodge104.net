@@ -49,6 +49,31 @@ The infrastructure consists of:
 3. An AWS key pair for SSH access (optional)
 4. Domain name and SSL certificate in ACM (optional)
 
+### S3 Backend Setup (Recommended)
+
+Before deploying your infrastructure, set up remote state storage in S3 for better collaboration and state management:
+
+1. **Automated Setup** (Recommended):
+
+   ```bash
+   ./scripts/setup-backend.sh
+   ```
+
+2. **Manual Setup**:
+   ```bash
+   cd bootstrap
+   terraform init
+   terraform apply
+   ```
+
+This creates:
+
+- S3 buckets for state storage (encrypted with versioning)
+- DynamoDB tables for state locking
+- Proper security configurations
+
+After setup, your environments will automatically use S3 for state storage.
+
 ### Deployment Steps
 
 1. **Clone the repository**:

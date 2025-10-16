@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "your-dev-bucket-name"
+    bucket         = "lodge104-terraform-state-dev"
     key            = "dev/terraform.tfstate"
-    region         = "your-region"
-    dynamodb_table = "your-lock-table"
+    region         = "us-east-1"
+    dynamodb_table = "lodge104-terraform-lock-dev"
     encrypt        = true
   }
 }

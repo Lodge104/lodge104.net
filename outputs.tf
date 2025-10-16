@@ -64,3 +64,13 @@ output "hosted_zone_name_servers" {
   description = "Name servers for the hosted zone"
   value       = module.route53.hosted_zone_name_servers
 }
+
+output "ssl_certificate_arn" {
+  description = "ARN of the SSL certificate for the domain"
+  value       = module.acm.certificate_arn
+}
+
+output "route53_zone_id" {
+  description = "Route53 hosted zone ID"
+  value       = module.route53.hosted_zone_id
+}
