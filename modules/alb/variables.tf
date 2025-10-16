@@ -66,3 +66,9 @@ variable "backend_protocol" {
   type        = string
   default     = "HTTP"
 }
+
+variable "enable_https_listener" {
+  description = "Enable HTTPS listener (requires SSL certificate)"
+  type        = bool
+  default     = false
+}

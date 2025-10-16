@@ -30,18 +30,18 @@ module "efs" {
   security_group_id = module.security.efs_security_group_id
 }
 
-module "elasticache" {
-  source = "./modules/elasticache"
-  
-  project_name       = var.project_name
-  environment       = "prod"
-  subnet_ids        = module.vpc.database_subnet_ids
-  security_group_ids = [module.security.redis_security_group_id]
-  node_type         = var.redis_node_type
-  num_cache_clusters = var.redis_num_cache_clusters
-  auth_token        = var.redis_auth_token
-  auth_token_enabled = var.redis_auth_token != ""
-}
+# module "elasticache" {
+#   source = "./modules/elasticache"
+#   
+#   project_name       = var.project_name
+#   environment       = "prod"
+#   subnet_ids        = module.vpc.database_subnet_ids
+#   security_group_ids = [module.security.redis_security_group_id]
+#   node_type         = var.redis_node_type
+#   num_cache_clusters = var.redis_num_cache_clusters
+#   auth_token        = var.redis_auth_token
+#   auth_token_enabled = var.redis_auth_token != ""
+# }
 
 module "rds" {
   source = "./modules/rds"
@@ -69,6 +69,7 @@ module "alb" {
   public_subnet_ids   = module.vpc.public_subnet_ids
   security_group_ids  = [module.security.alb_security_group_id]
   ssl_certificate_arn = module.acm.certificate_arn
+  enable_https_listener = var.domain_name != "" ? true : false
   
   # Backend HTTPS configuration
   enable_https_backend = var.enable_https_backend
@@ -92,9 +93,9 @@ module "autoscaling" {
   db_name           = var.db_name
   db_username       = var.db_username
   db_password       = var.db_password
-  redis_endpoint    = module.elasticache.redis_primary_endpoint
-  redis_port        = module.elasticache.redis_port
-  redis_auth_token  = var.redis_auth_token
+  redis_endpoint    = ""  # ElastiCache temporarily disabled
+  redis_port        = "6379"
+  redis_auth_token  = ""
   primary_domain    = var.domain_name
   enable_https_backend = var.enable_https_backend
   min_size          = var.min_size

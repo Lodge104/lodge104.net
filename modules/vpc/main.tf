@@ -66,8 +66,7 @@ resource "aws_subnet" "database" {
 
 # Elastic IPs for NAT Gateways
 resource "aws_eip" "nat" {
-  count  = length(var.public_subnet_cidrs)
-  domain = "vpc"
+  count = length(var.public_subnet_cidrs)
 
   depends_on = [aws_internet_gateway.main]
 

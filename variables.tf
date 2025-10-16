@@ -226,3 +226,37 @@ variable "enable_https_backend" {
   type        = bool
   default     = false
 }
+
+# Additional Database Variables
+variable "db_instance_class" {
+  description = "The instance class for the RDS database"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_engine" {
+  description = "The database engine"
+  type        = string
+  default     = "mysql"
+}
+
+# EFS Configuration
+variable "efs_performance_mode" {
+  description = "The performance mode for the EFS file system"
+  type        = string
+  default     = "generalPurpose"
+}
+
+# Route53 Configuration (Legacy)
+variable "route53_domain_name" {
+  description = "The domain name for Route53 (legacy variable, use domain_name instead)"
+  type        = string
+  default     = ""
+}
+
+variable "route53_hosted_zone_id" {
+  description = "The hosted zone ID for Route53 (legacy variable, use route53_zone_id instead)"
+  type        = string
+  default     = ""
+}
+

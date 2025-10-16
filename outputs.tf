@@ -43,21 +43,21 @@ output "efs_file_system_id" {
   value       = module.efs.file_system_id
 }
 
-# Redis Outputs
-output "redis_primary_endpoint" {
-  description = "Primary endpoint for Redis cluster"
-  value       = module.elasticache.redis_primary_endpoint
-}
+# Redis Outputs (temporarily disabled)
+# output "redis_primary_endpoint" {
+#   description = "Primary endpoint for Redis cluster"
+#   value       = module.elasticache.redis_primary_endpoint
+# }
 
-output "redis_port" {
-  description = "Port of the Redis cluster"
-  value       = module.elasticache.redis_port
-}
+# output "redis_port" {
+#   description = "Port of the Redis cluster"
+#   value       = module.elasticache.redis_port
+# }
 
-output "redis_replication_group_id" {
-  description = "ID of the Redis replication group"
-  value       = module.elasticache.redis_replication_group_id
-}
+# output "redis_replication_group_id" {
+#   description = "ID of the Redis replication group"
+#   value       = module.elasticache.redis_replication_group_id
+# }
 
 # Route53 Outputs
 output "hosted_zone_name_servers" {

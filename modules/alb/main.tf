@@ -58,7 +58,7 @@ resource "aws_lb_listener" "http" {
 
 # HTTPS Listener
 resource "aws_lb_listener" "https" {
-  count             = var.ssl_certificate_arn != "" ? 1 : 0
+  count             = var.enable_https_listener ? 1 : 0
   load_balancer_arn = aws_lb.wordpress_alb.arn
   port              = "443"
   protocol          = "HTTPS"
@@ -73,7 +73,7 @@ resource "aws_lb_listener" "https" {
 
 # HTTP Listener for non-SSL (when no certificate)
 resource "aws_lb_listener" "http_forward" {
-  count             = var.ssl_certificate_arn == "" ? 1 : 0
+  count             = var.enable_https_listener ? 0 : 1
   load_balancer_arn = aws_lb.wordpress_alb.arn
   port              = "80"
   protocol          = "HTTP"
