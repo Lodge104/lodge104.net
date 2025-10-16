@@ -4,7 +4,7 @@ module "vpc" {
   source = "./modules/vpc"
   
   project_name          = var.project_name
-  environment          = "prod"
+  environment          = var.environment
   vpc_cidr             = var.vpc_cidr
   availability_zones   = var.availability_zones
   public_subnet_cidrs  = var.public_subnet_cidrs
@@ -16,7 +16,7 @@ module "security" {
   source = "./modules/security"
   
   project_name       = var.project_name
-  environment       = "prod"
+  environment       = var.environment
   vpc_id            = module.vpc.vpc_id
   allowed_ip_ranges = ["0.0.0.0/0"]
 }
@@ -25,7 +25,7 @@ module "efs" {
   source = "./modules/efs"
   
   project_name       = var.project_name
-  environment       = "prod"
+  environment       = var.environment
   subnet_ids        = module.vpc.private_subnet_ids
   security_group_id = module.security.efs_security_group_id
 }
@@ -44,27 +44,28 @@ module "efs" {
 # }
 
 module "rds" {
-  source = "./modules/rds"
-  
-  cluster_identifier      = "${var.project_name}-aurora"
-  db_name                = var.db_name
+  source                 = "./modules/rds"
+  cluster_identifier     = "lodge104-${var.environment}-aurora"
   username               = var.db_username
   password               = var.db_password
   security_group_id      = module.security.database_security_group_id
-  subnet_ids             = module.vpc.database_subnet_ids
+  db_subnet_ids          = module.vpc.database_subnet_ids
   backup_retention_period = var.backup_retention_period
-  skip_final_snapshot    = var.skip_final_snapshot
-  deletion_protection    = var.deletion_protection
-  auto_pause            = var.auto_pause
-  max_capacity          = var.max_capacity
-  min_capacity          = var.min_capacity
+  backup_window          = var.backup_window
+  maintenance_window     = var.maintenance_window
+  auto_pause             = var.auto_pause
+  max_capacity           = var.max_capacity
+  min_capacity           = var.min_capacity
+  seconds_until_auto_pause = var.seconds_until_auto_pause
+  project_name           = var.project_name
+  environment            = var.environment
 }
 
 module "alb" {
   source = "./modules/alb"
   
   project_name         = var.project_name
-  environment         = "prod"
+  environment         = var.environment
   vpc_id              = module.vpc.vpc_id
   public_subnet_ids   = module.vpc.public_subnet_ids
   security_group_ids  = [module.security.alb_security_group_id]
@@ -81,7 +82,7 @@ module "autoscaling" {
   source = "./modules/autoscaling"
   
   project_name       = var.project_name
-  environment       = "prod"
+  environment       = var.environment
   ami_id            = data.aws_ami.amazon_linux_2.id
   instance_type     = var.instance_type
   key_name          = "wordpress-key" # You'll need to create this key pair
@@ -107,7 +108,7 @@ module "acm" {
   source = "./modules/acm"
   
   project_name     = var.project_name
-  environment     = "prod"
+  environment     = var.environment
   domain_name     = var.domain_name
   route53_zone_id = var.route53_zone_id
 }
@@ -116,7 +117,7 @@ module "cloudfront" {
   source = "./modules/cloudfront"
   
   project_name         = var.project_name
-  environment         = "prod"
+  environment         = var.environment
   alb_domain_name     = module.alb.alb_dns_name
   domain_name         = var.domain_name
   ssl_certificate_arn = module.acm.certificate_arn
@@ -136,7 +137,7 @@ module "route53" {
   source = "./modules/route53"
   
   project_name           = var.project_name
-  environment           = "prod"
+  environment           = var.environment
   domain_name           = var.domain_name
   cloudfront_domain_name = module.cloudfront.cloudfront_domain_name
   cloudfront_zone_id    = module.cloudfront.cloudfront_hosted_zone_id

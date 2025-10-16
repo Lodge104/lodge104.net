@@ -260,3 +260,22 @@ variable "route53_hosted_zone_id" {
   default     = ""
 }
 
+# Additional Aurora Variables
+variable "backup_window" {
+  description = "The daily time range for backups"
+  type        = string
+  default     = "03:00-04:00"
+}
+
+variable "maintenance_window" {
+  description = "The weekly maintenance window"
+  type        = string
+  default     = "sun:04:00-sun:05:00"
+}
+
+variable "seconds_until_auto_pause" {
+  description = "The time in seconds before Aurora Serverless is paused"
+  type        = number
+  default     = 300
+}
+

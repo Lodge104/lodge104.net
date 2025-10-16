@@ -34,9 +34,20 @@ variable "security_group_id" {
   type        = string
 }
 
-variable "subnet_ids" {
+variable "db_subnet_ids" {
   description = "List of subnet IDs for the DB subnet group"
   type        = list(string)
+}
+
+variable "project_name" {
+  description = "The name of the project"
+  type        = string
+  default     = "lodge104"
+}
+
+variable "environment" {
+  description = "The environment name (dev, prod, etc.)"
+  type        = string
 }
 
 variable "backup_retention_period" {

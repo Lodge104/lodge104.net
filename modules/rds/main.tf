@@ -28,10 +28,10 @@ resource "aws_rds_cluster" "wordpress_aurora" {
 }
 
 resource "aws_db_subnet_group" "wordpress_subnet_group" {
-  name       = "wordpress-subnet-group"
-  subnet_ids = var.subnet_ids
+  name       = "${var.project_name}-${var.environment}-db-subnet-group"
+  subnet_ids = var.db_subnet_ids
 
   tags = {
-    Name = "wordpress-subnet-group"
+    Name = "${var.project_name}-${var.environment}-db-subnet-group"
   }
 }
