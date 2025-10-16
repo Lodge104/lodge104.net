@@ -1,9 +1,8 @@
-# Aurora Serverless Cluster
+# Aurora Serverless v2 Cluster
 resource "aws_rds_cluster" "wordpress_aurora" {
   cluster_identifier      = var.cluster_identifier
   engine                 = "aurora-mysql"
-  engine_mode            = "serverless"
-  engine_version         = var.aurora_engine_version
+  engine_version         = "8.0.mysql_aurora.3.02.0"
   database_name          = var.db_name
   master_username        = var.username
   master_password        = var.password
@@ -15,15 +14,27 @@ resource "aws_rds_cluster" "wordpress_aurora" {
   skip_final_snapshot    = var.skip_final_snapshot
   deletion_protection    = var.deletion_protection
 
-  scaling_configuration {
-    auto_pause               = var.auto_pause
-    max_capacity            = var.max_capacity
-    min_capacity            = var.min_capacity
-    seconds_until_auto_pause = var.seconds_until_auto_pause
+  serverlessv2_scaling_configuration {
+    max_capacity = var.max_capacity
+    min_capacity = var.min_capacity
   }
 
   tags = {
-    Name = "wordpress-aurora-serverless"
+    Name = "wordpress-aurora-serverless-v2"
+  }
+}
+
+# Aurora Serverless v2 Instance (required for Serverless v2)
+resource "aws_rds_cluster_instance" "wordpress_aurora_instance" {
+  count              = 1
+  identifier         = "${var.cluster_identifier}-instance-${count.index + 1}"
+  cluster_identifier = aws_rds_cluster.wordpress_aurora.id
+  instance_class     = "db.serverless"
+  engine             = aws_rds_cluster.wordpress_aurora.engine
+  engine_version     = aws_rds_cluster.wordpress_aurora.engine_version
+
+  tags = {
+    Name = "wordpress-aurora-serverless-v2-instance-${count.index + 1}"
   }
 }
 

@@ -115,22 +115,21 @@ module "acm" {
 
 module "cloudfront" {
   source = "./modules/cloudfront"
-  
-  project_name         = var.project_name
-  environment         = var.environment
-  alb_domain_name     = module.alb.alb_dns_name
-  domain_name         = var.domain_name
-  ssl_certificate_arn = module.acm.certificate_arn
-  
-  # CloudFront caching configuration
-  price_class      = var.cloudfront_price_class
-  default_ttl      = var.cloudfront_default_ttl
-  max_ttl          = var.cloudfront_max_ttl
-  min_ttl          = var.cloudfront_min_ttl
-  admin_ttl        = var.cloudfront_admin_ttl
-  compress         = var.cloudfront_compress
-  query_string     = var.cloudfront_query_string
-  cookies_forward  = var.cloudfront_cookies_forward
+
+  domain_name           = "${var.environment}.${var.domain_name}"
+  alb_domain_name       = module.alb.alb_dns_name
+  ssl_certificate_arn   = module.acm.certificate_arn
+  environment          = var.environment
+
+  # Caching configuration
+  price_class     = var.cloudfront_price_class
+  default_ttl     = var.cloudfront_default_ttl
+  max_ttl         = var.cloudfront_max_ttl
+  min_ttl         = var.cloudfront_min_ttl
+  admin_ttl       = var.cloudfront_admin_ttl
+  compress        = var.cloudfront_compress
+  query_string    = var.cloudfront_query_string
+  cookies_forward = var.cloudfront_cookies_forward
 }
 
 module "route53" {

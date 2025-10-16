@@ -36,4 +36,23 @@ variable "cloudfront_domain_name" {
 variable "cloudfront_zone_id" {
   description = "CloudFront distribution hosted zone ID"
   type        = string
+  default     = ""
+}
+
+variable "alb_domain_name" {
+  description = "Application Load Balancer domain name"
+  type        = string
+  default     = ""
+}
+
+variable "alb_zone_id" {
+  description = "Application Load Balancer hosted zone ID"
+  type        = string
+  default     = ""
+}
+
+variable "use_cloudfront" {
+  description = "Whether to use CloudFront (true) or ALB (false) for DNS records"
+  type        = bool
+  default     = false
 }
